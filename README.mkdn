@@ -1,0 +1,62 @@
+
+[![Windows](https://github.com/Corion/String-FuzzyMatch/workflows/windows/badge.svg)](https://github.com/Corion/String-FuzzyMatch/actions?query=workflow%3Awindows)
+[![MacOS](https://github.com/Corion/String-FuzzyMatch/workflows/macos/badge.svg)](https://github.com/Corion/String-FuzzyMatch/actions?query=workflow%3Amacos)
+[![Linux](https://github.com/Corion/String-FuzzyMatch/workflows/linux/badge.svg)](https://github.com/Corion/String-FuzzyMatch/actions?query=workflow%3Alinux)
+
+# NAME
+
+String::FuzzyFind - match strings fuzzily
+
+# SYNOPSIS
+
+    my $filter = String::FuzzyFind->new(
+        highlight_start => '[',
+        highlight_end => ']',
+    );
+
+    $filter->filter( 'ab', ['aab','abc','acb','cba','aaa', 'abab'] );
+    # ['aab','abc','acb' ]
+
+    # By default ignores diacritics in haystack
+    $filter->( 'ab', ['aäb','abc','äbc','äcb','cba','aaa'] );
+    # ['aäb','abc','äbc','äcb' ]
+
+    # By default respects diacritics in needle
+    $filter->( 'äb', ['aäb','abc','äbc','äcb','cba','aaa'] );
+    # ['aäb','äbc','äcb' ]
+
+    # Ignore diacritics in needle as well
+    my $ignore_diacritics = String::FuzzyFind->new(
+        ignore_diacritics_lhs => 1,
+    );
+    $ignore_diacritics->( 'äb', ['aäb','abc','äbc','äcb','cba','aaa'] );
+    # ['aäb','abc','äbc','äcb']
+
+
+    $filter->highlight( 'ab', 'äcb' );
+    # '[ä]c[b]'
+
+    $filter->highlight( 'ab', 'äb/c' );
+    # '[äb]/c'
+
+# DESCRIPTION
+
+This module fuzzily matches strings. All characters of the search string
+("needle") must occur in sequence in the strings in the search list
+("haystack"). So filtering by `ab` will find `a/b`, `aaaab`
+and `cranberry`.
+
+The searcher expects Unicode strings and matches using Unicode semantics.
+The filter by default ignores diacritics and case in the haystack
+and case in the needle, searching for `abba` will also find `ÄBBA`
+by default.
+
+## `new`
+
+Creates a new filter
+
+    my $filter = String::FuzzyFilter->new();
+
+## `->filter`
+
+## `->highlight`
