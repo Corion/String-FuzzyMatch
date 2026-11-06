@@ -228,6 +228,8 @@ sub highlight( $self, $needle, $o_str, %args ) {
     # Rebuild the string with the markers inserted
     my $res = '';
 
+    my ($match_start);
+
     for my $i (1.. scalar(@+) -1) {
         my $matched = !($i % 2); # odd parentheses are matched parts
 
@@ -238,17 +240,27 @@ sub highlight( $self, $needle, $o_str, %args ) {
 
         if( $matched and ($-[$i]==0 or $-[$i-1] != $+[$i-1])) {
             # A match just started
-            $res .= $args{ highlight_start };
+            if( ! $cb ) {
+                $res .= $args{ highlight_start };
+            };
+            $match_start //= $-[$i];
         };
         if( !$matched and $-[$i] < $+[$i] and $i > 1) {
             # A match just ended
-            $res .= $args{ highlight_end };
+            if( $cb ) {
+                $res .= $cb->(substr( $str, $match_start, $+[$i-1]-$match_start ));
+                undef $match_start;
+            } else {
+                $res .= $args{ highlight_end };
+            };
         };
 
-        $res .= substr( $str, $-[$i], $+[$i]-$-[$i] );
+        $res .= substr( $str, $-[$i], $+[$i]-$-[$i] )
+            if( !$matched or !$cb);
     }
     # Append the end, which is always unmatched
-    $res .= $args{ highlight_end } . substr( $str, $+[-1] );
+
+    $res .= ($cb ? $cb->(substr( $str, $match_start, $+[scalar @+ -1]-$match_start )) : $args{ highlight_end }) . substr( $str, $+[-1] );
 
     return $res;
 }

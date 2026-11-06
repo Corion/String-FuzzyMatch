@@ -1,4 +1,5 @@
 use 5.020;
+use experimental 'signatures';
 use Test2::V0 -no_srand;
 use utf8;
 use Unicode::Normalize;
@@ -68,9 +69,37 @@ my @highlight = (
   [ 'aa',       "bc\N{LATIN SMALL LETTER A WITH DIAERESIS}a",   'bc[äa]',    "continouus matches (nfd)" ],
   [ 'aa',       'abca',   '[a]bc[a]',    "split" ],
 );
-for my $t (@highlight) {
-    is NFD($default->highlight( $t->[0], $t->[1] )), NFD($t->[2]), $t->[3];
+
+subtest 'default highlighting' => sub {
+    for my $t (@highlight) {
+        is NFD($default->highlight( $t->[0], $t->[1] )), NFD($t->[2]), $t->[3];
+    };
 };
 
+subtest 'html highlight callback' => sub{
+    my $html = String::FuzzyMatch->new(
+        highlight_start => '<highlight>',
+        highlight_end => '</highlight>',
+    );
+    for my $t (@highlight) {
+        my $expected = $t->[2];
+        $expected =~ s/\[/<highlight>/g;
+        $expected =~ s!\]!</highlight>!g;
+        is NFD($html->highlight( $t->[0], $t->[1] )), NFD($expected), $t->[3];
+    };
+};
+
+
+subtest 'custom highlight callback' => sub{
+    my $custom = String::FuzzyMatch->new(
+        highlight_cb => sub( $match ) { return "<<$match>>" },
+    );
+    for my $t (@highlight) {
+        my $expected = $t->[2];
+        $expected =~ s/\[/<</g;
+        $expected =~ s/\]/>>/g;
+        is NFD($custom->highlight( $t->[0], $t->[1] )), NFD($expected), $t->[3];
+    };
+};
 
 done_testing;
