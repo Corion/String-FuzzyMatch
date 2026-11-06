@@ -86,8 +86,8 @@ Creates a new filter
 
         match => 'caption'
 
-    Key of the hash to use for matching. Can be a scalar or a callback.
-    Default: `undef`.
+    Key of the hash to use for matching, if haystack contains only hashrefs. Can
+    be a scalar or a callback. Default: `undef`.
 
 ## `->filter $needle, $haystack`
 
@@ -103,3 +103,31 @@ Returns a string with the matched parts of a string highlighted.
 
     my $higlighted = $filter->highlight( 'ab', 'all/users/ben' );
     # '[a]ll/users/[b]en'
+
+Note that the returned string will be in NFD.
+
+# REPOSITORY
+
+The public repository of this module is
+[https://github.com/Corion/String-FuzzyMatch](https://github.com/Corion/String-FuzzyMatch).
+
+# SUPPORT
+
+The public support forum of this module is [https://perlmonks.org/](https://perlmonks.org/).
+
+# BUG TRACKER
+
+Please report bugs in this module via the Github bug queue at
+[https://github.com/Corion/String-FuzzyMatch/issues](https://github.com/Corion/String-FuzzyMatch/issues)
+
+# AUTHOR
+
+Max Maischein `corion@cpan.org`
+
+# COPYRIGHT (c)
+
+Copyright 2026-2026 by Max Maischein `corion@cpan.org`.
+
+# LICENSE
+
+This module is released under the same terms as Perl itself.

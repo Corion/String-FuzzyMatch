@@ -117,8 +117,8 @@ has 'highlight_cb' => (
 
   match => 'caption'
 
-Key of the hash to use for matching. Can be a scalar or a callback.
-Default: C<undef>.
+Key of the hash to use for matching, if haystack contains only hashrefs. Can
+be a scalar or a callback. Default: C<undef>.
 
 =back
 
@@ -266,6 +266,8 @@ Returns a string with the matched parts of a string highlighted.
   my $higlighted = $filter->highlight( 'ab', 'all/users/ben' );
   # '[a]ll/users/[b]en'
 
+Note that the returned string will be in NFD.
+
 =cut
 
 sub highlight( $self, $needle, $o_str, %args ) {
@@ -323,3 +325,31 @@ sub highlight( $self, $needle, $o_str, %args ) {
 }
 
 1;
+
+=head1 REPOSITORY
+
+The public repository of this module is
+L<https://github.com/Corion/String-FuzzyMatch>.
+
+=head1 SUPPORT
+
+The public support forum of this module is L<https://perlmonks.org/>.
+
+=head1 BUG TRACKER
+
+Please report bugs in this module via the Github bug queue at
+L<https://github.com/Corion/String-FuzzyMatch/issues>
+
+=head1 AUTHOR
+
+Max Maischein C<corion@cpan.org>
+
+=head1 COPYRIGHT (c)
+
+Copyright 2026-2026 by Max Maischein C<corion@cpan.org>.
+
+=head1 LICENSE
+
+This module is released under the same terms as Perl itself.
+
+=cut
