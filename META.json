@@ -1,5 +1,5 @@
 {
-   "abstract" : "unknown",
+   "abstract" : "match strings fuzzily",
    "author" : [
       "Max Maischein <corion@cpan.org>"
    ],
