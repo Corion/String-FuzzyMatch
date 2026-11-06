@@ -78,8 +78,6 @@ Creates a new filter
 
 =over 4
 
-=back
-
 =cut
 
 has '_filter_code' => (
@@ -87,6 +85,13 @@ has '_filter_code' => (
     required => 1,
 );
 
+=item B<highlight>, B<highlight_start>, B<highlight_end>
+
+  highlight => '_'
+
+String to use for highlighting. Default C<[> and C<]>.
+
+=cut
 has 'highlight_start' => (
     is => 'rw',
 );
@@ -95,8 +100,32 @@ has 'highlight_end' => (
     is => 'rw',
 );
 
+=item B<highlight_cb>
+
+  highlight_cb =>  sub( $match ) { return "->$match<-" }
+
+Callback to return a highlighted match.
+Default: C<undef>.
+
+=cut
+
 has 'highlight_cb' => (
     is => 'rw',
+);
+
+=item B<match>
+
+  match => 'caption'
+
+Key of the hash to use for matching. Can be a scalar or a callback.
+Default: C<undef>.
+
+=back
+
+=cut
+
+has 'match' => (
+    is => 'ro',
 );
 
 sub _build_filter_re( $self, $needle, %args ) {
@@ -123,13 +152,26 @@ sub _build_filter_re( $self, $needle, %args ) {
 
 # Default filter builder
 sub _naive_filter( $self, %args ) {
-    return sub( $needle, $haystack ) {
-        my $q = $self->_build_filter_re( $needle, %args );
-        return [
-            grep { NFD($_) =~ /$q/ }
-            $haystack->@*
-        ];
-    }
+    my $fetch = $args{ match } // (ref $self && $self->match);
+
+    if( $fetch ) {
+        return sub( $needle, $haystack ) {
+            my $q = $self->_build_filter_re( $needle, %args );
+            return [
+                grep { NFD($fetch->($_)) =~ /$q/ }
+                $haystack->@*
+            ];
+        }
+
+    } else {
+        return sub( $needle, $haystack ) {
+            my $q = $self->_build_filter_re( $needle, %args );
+            return [
+                grep { NFD($_) =~ /$q/ }
+                $haystack->@*
+            ];
+        }
+    };
 }
 
 
@@ -183,6 +225,11 @@ sub _naive_filter( $self, %args ) {
 #}
 
 around BUILDARGS => sub( $orig, $class, %args ) {
+    if( $args{ match } && !ref $args{ match }) {
+        my $key = delete $args{ match };
+        $args{ match } = sub( $o ) { $o->{$key} };
+    }
+
     $args{ _filter_code } = $class->_naive_filter( %args );
 
     #if( $args{ignore_diacritics_lhs} ) {

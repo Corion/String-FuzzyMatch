@@ -89,7 +89,6 @@ subtest 'html highlight callback' => sub{
     };
 };
 
-
 subtest 'custom highlight callback' => sub{
     my $custom = String::FuzzyMatch->new(
         highlight_cb => sub( $match ) { return "<<$match>>" },
@@ -100,6 +99,22 @@ subtest 'custom highlight callback' => sub{
         $expected =~ s/\]/>>/g;
         is NFD($custom->highlight( $t->[0], $t->[1] )), NFD($expected), $t->[3];
     };
+};
+
+subtest 'match hash-key extraction' => sub {
+    my $f = String::FuzzyMatch->new(
+        match => 'caption',
+    );
+
+    is $f->filter("aa", [ { caption => 'Neu' }, { caption => 'Alle Änderungen' } ]), [{caption => 'Alle Änderungen'}], "String hash-key extraction works";
+};
+
+subtest 'match subroutine extraction' => sub {
+    my $f = String::FuzzyMatch->new(
+        match => sub($o) { $o->{'caption'} },
+    );
+
+    is $f->filter("aa", [ { caption => 'Neu' }, { caption => 'Alle Änderungen' } ]), [{caption => 'Alle Änderungen'}], "Callback extraction works";
 };
 
 done_testing;
