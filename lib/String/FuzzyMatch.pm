@@ -19,22 +19,22 @@ String::FuzzyFind - match strings fuzzily
   );
 
   $filter->filter( 'ab', ['aab','abc','acb','cba','aaa', 'abab'] );
-  # ['aab','abc','acb' ]
+  # ['aab','abc','acb','abab' ]
 
-  # By default ignores diacritics in haystack
-  $filter->( 'ab', ['aäb','abc','äbc','äcb','cba','aaa'] );
-  # ['aäb','abc','äbc','äcb' ]
+  # By default ignores diacritics and case in haystack
+  $filter->( 'ab', ['Aäb','abc','Äbc','äcb','cba','aaa'] );
+  # ['Aäb','abc','Äbc','äcb' ]
 
   # By default respects diacritics in needle
-  $filter->( 'äb', ['aäb','abc','äbc','äcb','cba','aaa'] );
-  # ['aäb','äbc','äcb' ]
+  $filter->( 'äb', ['aäb','abc','Äbc','äcb','cba','aaa'] );
+  # ['aäb','Äbc','äcb' ]
 
   # Ignore diacritics in needle as well
   my $ignore_diacritics = String::FuzzyFind->new(
       ignore_diacritics_lhs => 1,
   );
-  $ignore_diacritics->( 'äb', ['aäb','abc','äbc','äcb','cba','aaa'] );
-  # ['aäb','abc','äbc','äcb']
+  $ignore_diacritics->( 'äb', ['aäb','abc','äbc','Äcb','cba','aaa'] );
+  # ['aäb','abc','äbc','Äcb']
 
 
   $filter->highlight( 'ab', 'äcb' );
@@ -42,6 +42,15 @@ String::FuzzyFind - match strings fuzzily
 
   $filter->highlight( 'ab', 'äb/c' );
   # '[äb]/c'
+
+  # HTML highlighting
+  my $html = String::FuzzyFind->new(
+      highlight_start => '<highlight>',
+      highlight_end => '</highlight>',
+  );
+  $html->highlight( 'ab', 'äcb' );
+  # '<highlight>ä</highlight>c<highlight>b</highlight>'
+
 
 =head1 DESCRIPTION
 
