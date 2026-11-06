@@ -12,6 +12,10 @@ The filter by default ignores diacritics and case in the haystack
 and case in the needle, searching for C<abba> will also find C<ÃBBA>
 by default.
 
+This search approach is heavily inspired by the
+filtering in L<fzf|https://junegunn.github.io/fzf/> but does not
+implement any of the advanced query language.
+
 This document describes version 0.01.
 
 

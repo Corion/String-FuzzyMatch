@@ -51,6 +51,10 @@ The filter by default ignores diacritics and case in the haystack
 and case in the needle, searching for `abba` will also find `ÄBBA`
 by default.
 
+This search approach is heavily inspired by the
+filtering in [fzf](https://junegunn.github.io/fzf/) but does not
+implement any of the advanced query language.
+
 ## `new`
 
 Creates a new filter

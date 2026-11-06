@@ -55,6 +55,10 @@ The filter by default ignores diacritics and case in the haystack
 and case in the needle, searching for C<abba> will also find C<ÄBBA>
 by default.
 
+This search approach is heavily inspired by the
+filtering in L<fzf|https://junegunn.github.io/fzf/> but does not
+implement any of the advanced query language.
+
 =cut
 
 =head2 C<< new >>
