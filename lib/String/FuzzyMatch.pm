@@ -237,7 +237,6 @@ sub highlight( $self, $needle, $o_str, %args ) {
         #use Data::Dumper; $Data::Dumper::Useqq = 1;
         #say Dumper substr( $str, $-[$i], $+[$i]-$-[$i] );
 
-
         if( $matched and ($-[$i]==0 or $-[$i-1] != $+[$i-1])) {
             # A match just started
             if( ! $cb ) {
@@ -258,8 +257,8 @@ sub highlight( $self, $needle, $o_str, %args ) {
         $res .= substr( $str, $-[$i], $+[$i]-$-[$i] )
             if( !$matched or !$cb);
     }
-    # Append the end, which is always unmatched
 
+    # Append the end, which is always unmatched
     $res .= ($cb ? $cb->(substr( $str, $match_start, $+[scalar @+ -1]-$match_start )) : $args{ highlight_end }) . substr( $str, $+[-1] );
 
     return $res;
