@@ -198,7 +198,13 @@ around BUILDARGS => sub( $orig, $class, %args ) {
     return $class->$orig(%args);
 };
 
-=head2 C<< ->filter >>
+=head2 C<< ->filter $needle, $haystack >>
+
+  my $results = $filter->filter( 'ab', ['ABBA','cabbage','all/users/ben','Änderungen (bearbeitet)','nobody'] );
+  # ['ABBA','cabbage','all/users/ben','Änderungen (bearbeitet)']
+
+Filters a list by the query given as string. All strings are assumed
+to be Unicode strings.
 
 =cut
 
@@ -206,7 +212,12 @@ sub filter( $self, $needle, $haystack ) {
     $self->_filter_code->($needle,$haystack)
 }
 
-=head2 C<< ->highlight >>
+=head2 C<< ->highlight $needle, $str >>
+
+Returns a string with the matched parts of a string highlighted.
+
+  my $higlighted = $filter->highlight( 'ab', 'all/users/ben' );
+  # '[a]ll/users/[b]en'
 
 =cut
 
