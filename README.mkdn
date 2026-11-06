@@ -5,7 +5,7 @@
 
 # NAME
 
-String::FuzzyFind - match strings fuzzily
+String::FuzzyMatch - match strings fuzzily
 
 # SYNOPSIS
 

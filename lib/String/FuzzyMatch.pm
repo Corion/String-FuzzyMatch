@@ -9,7 +9,7 @@ use Moo 2;
 
 =head1 NAME
 
-String::FuzzyFind - match strings fuzzily
+String::FuzzyMatch - match strings fuzzily
 
 =head1 SYNOPSIS
 
