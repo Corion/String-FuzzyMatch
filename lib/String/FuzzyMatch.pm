@@ -1,5 +1,5 @@
 package String::FuzzyMatch 0.01;
-use 5.020;
+use 5.022;
 use experimental 'signatures';
 use feature 'postderef';
 use Unicode::Normalize;

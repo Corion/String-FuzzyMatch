@@ -5,6 +5,8 @@ author:
 build_requires:
   ExtUtils::MakeMaker: '0'
   Test2::V0: '0'
+  Test::More: '0'
+  Unicode::Normalize: '0'
 configure_requires:
   ExtUtils::MakeMaker: '0'
 dynamic_config: 0
@@ -19,8 +21,11 @@ no_index:
     - t
     - inc
 requires:
-  Exporter: '5'
-  perl: '5.020'
+  Moo: '2'
+  Unicode::Normalize: '0'
+  experimental: '0'
+  feature: '0'
+  perl: '5.022'
 resources:
   bugtracker: https://github.com/Corion/String-FuzzyMatch/issues
   license: https://dev.perl.org/licenses/

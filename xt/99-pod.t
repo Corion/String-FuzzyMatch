@@ -42,7 +42,7 @@ else {
     push @files, @$exe;
   };
 
-  plan tests => scalar @files;
+  plan tests => scalar @files *2;
   foreach my $file (@files) {
     pod_file_ok($file);
 
@@ -55,3 +55,6 @@ else {
 sub wanted {
   push @files, $File::Find::name if /\.p(l|m|od)$/;
 }
+
+done_testing;
+

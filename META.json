@@ -32,13 +32,18 @@
       },
       "runtime" : {
          "requires" : {
-            "Exporter" : "5",
-            "perl" : "5.020"
+            "Moo" : "2",
+            "Unicode::Normalize" : "0",
+            "experimental" : "0",
+            "feature" : "0",
+            "perl" : "5.022"
          }
       },
       "test" : {
          "requires" : {
-            "Test2::V0" : "0"
+            "Test2::V0" : "0",
+            "Test::More" : "0",
+            "Unicode::Normalize" : "0"
          }
       }
    },
